@@ -13,7 +13,7 @@ export default function DownloadPage() {
     const email = urlParams.get('email')
     if (!email) {
       navigate('/')
-    } else {
+    } else { 
       setLoading(false)
     }
   }, [navigate])

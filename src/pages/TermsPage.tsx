@@ -8,7 +8,7 @@ export default function TermsPage() {
       <main className="flex-1 container-custom py-12 max-w-3xl">
         <h1 className="text-3xl font-bold text-white mb-6">Terms & Conditions</h1>
         <div className="space-y-4 text-white/70">
-          <p><strong>Last Updated:</strong> August 2026</p>
+          <p><strong>Last Updated:</strong> August 2026</p> 
           
           <h2 className="text-xl font-semibold text-white mt-6">1. Acceptance of Terms</h2>
           <p>By using the Refero app or website, you agree to these terms.</p>

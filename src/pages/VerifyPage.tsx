@@ -14,7 +14,7 @@ export default function VerifyPage() {
   const [resendTimer, setResendTimer] = useState(30)
   const [canResend, setCanResend] = useState(false)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
-
+ 
   useEffect(() => {
     if (!email) {
       navigate('/')

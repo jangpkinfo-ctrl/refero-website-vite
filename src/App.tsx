@@ -8,7 +8,7 @@ import TermsPage from './pages/TermsPage'
 import PrivacyPage from './pages/PrivacyPage'
 import SupportPage from './pages/SupportPage'
 
-function App() {
+function App() { 
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />

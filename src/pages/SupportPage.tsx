@@ -37,7 +37,7 @@ export default function SupportPage() {
             <p className="text-white/60 mt-2">Stay updated and get quick assistance through our community channel.</p>
             <a
               href="https://t.me/refero"
-              target="_blank"
+              target="_blank" 
               rel="noopener noreferrer"
               className="inline-block mt-3 text-primary-400 hover:text-primary-300"
             >

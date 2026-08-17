@@ -11,7 +11,7 @@ export default function PrivacyPage() {
           <p><strong>Last Updated:</strong> August 2026</p>
           
           <h2 className="text-xl font-semibold text-white mt-6">1. Information We Collect</h2>
-          <p>We collect your email, name, referral data, and payment information.</p>
+          <p>We collect your email, name, referral data, and payment information.</p> 
           
           <h2 className="text-xl font-semibold text-white mt-6">2. How We Use Information</h2>
           <p>We use your data to provide our services, process payments, and improve the app.</p>
