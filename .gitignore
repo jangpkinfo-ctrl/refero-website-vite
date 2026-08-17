@@ -1,2 +1,44 @@
-node_modules
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+build/
+*.local
+
+# Environment variables
 .env
+.env.local
+.env.*.local
+
+# Firebase service account (if you accidentally put it here)
+service-account.json
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Coverage
+coverage/
+
+# Vite / Next.js (if any)
+.next/
+out/
+
+# Misc
+*.tmp
+*.temp
