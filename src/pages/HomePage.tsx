@@ -1,16 +1,23 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
-import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore'
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore'
 import { db } from '../lib/firebase'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
-interface CommissionSettings {
+interface Plan {
+  id: string
+  name: string
+  description: string
+  price: number
+  currency: string
   directCommissionPercent: number
   networkCommissionPercent: number
   networkDepth: number
-  planName: string
+  features: string[]
+  isActive: boolean
+  sortOrder: number
 }
 
 export default function HomePage() {
@@ -19,13 +26,8 @@ export default function HomePage() {
   const [referralCode, setReferralCode] = useState('')
   const [loading, setLoading] = useState(false)
   const [isReferralCodeLocked, setIsReferralCodeLocked] = useState(false)
-  const [settings, setSettings] = useState<CommissionSettings>({
-    directCommissionPercent: 20,
-    networkCommissionPercent: 5,
-    networkDepth: 3,
-    planName: 'Bronze',
-  })
-  const [settingsLoading, setSettingsLoading] = useState(true)
+  const [plans, setPlans] = useState<Plan[]>([])
+  const [plansLoading, setPlansLoading] = useState(true)
 
   useEffect(() => {
     const ref = searchParams.get('ref')
@@ -35,39 +37,33 @@ export default function HomePage() {
     }
   }, [searchParams])
 
-  // ─── Fetch commission settings from the "plans" collection ───
+  // ─── Fetch all active plans ───
   useEffect(() => {
-    const fetchSettings = async () => {
+    const fetchPlans = async () => {
       try {
-        // Get the first active plan (sorted by sortOrder)
         const q = query(
           collection(db, 'plans'),
           where('isActive', '==', true),
-          orderBy('sortOrder', 'asc'),
-          limit(1)
+          orderBy('sortOrder', 'asc')
         )
         const querySnapshot = await getDocs(q)
 
         if (!querySnapshot.empty) {
-          const planData = querySnapshot.docs[0].data()
-          setSettings({
-            directCommissionPercent: planData.directCommissionPercent ?? 20,
-            networkCommissionPercent: planData.networkCommissionPercent ?? 5,
-            networkDepth: planData.networkDepth ?? 3,
-            planName: planData.name || 'Bronze',
-          })
+          const fetchedPlans: Plan[] = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          })) as Plan[]
+          setPlans(fetchedPlans)
         } else {
-          // No active plans found – use defaults
           console.warn('No active plans found – using defaults')
         }
       } catch (error) {
-        console.error('Error fetching plan settings:', error)
-        // Keep defaults on error
+        console.error('Error fetching plans:', error)
       } finally {
-        setSettingsLoading(false)
+        setPlansLoading(false)
       }
     }
-    fetchSettings()
+    fetchPlans()
   }, [])
 
   const handleJoin = async () => {
@@ -101,8 +97,8 @@ export default function HomePage() {
       <Header />
       
       <main className="flex-1 container-custom py-12 md:py-20 flex flex-col items-center text-center">
-        <div className="max-w-3xl">
-          {/* Hero Section */}
+        <div className="max-w-4xl w-full">
+          {/* ─── Hero Section ─── */}
           <div className="space-y-4">
             <div className="inline-block px-4 py-1.5 rounded-full bg-primary-500/20 border border-primary-500/30 text-primary-400 text-sm font-medium">
               🚀 Referral Marketing Platform
@@ -115,13 +111,15 @@ export default function HomePage() {
             </h1>
             <p className="text-lg md:text-xl text-white/70 mt-4 max-w-2xl mx-auto">
               Build your referral network and earn commissions.
-              {settingsLoading
+              {plansLoading
                 ? ' Loading...'
-                : ` ${settings.directCommissionPercent}% on direct referrals, ${settings.networkCommissionPercent}% on network referrals.`}
+                : plans.length > 0
+                ? ` Up to ${Math.max(...plans.map(p => p.directCommissionPercent))}% direct commission and ${Math.max(...plans.map(p => p.networkCommissionPercent))}% network commission.`
+                : ' Earn with our referral program.'}
             </p>
           </div>
 
-          {/* Referral Code Input */}
+          {/* ─── Referral Code Input ─── */}
           <div className="card-glass p-6 md:p-8 mt-8 max-w-lg mx-auto">
             <p className="text-white/80 text-sm mb-3">
               Enter referral code or click a referral link
@@ -166,43 +164,87 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Stats Cards - More Professional */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
-            <div className="group bg-white/5 rounded-xl p-5 border border-white/5 hover:border-primary-500/30 transition-all duration-300 hover:bg-white/10 hover:scale-105">
-              <div className="flex items-center justify-center mb-2">
-                <span className="text-2xl">💰</span>
+          {/* ─── Plans Display ─── */}
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold text-white mb-6">Choose Your Plan</h2>
+            {plansLoading ? (
+              <div className="text-white/60">Loading plans...</div>
+            ) : plans.length === 0 ? (
+              <div className="text-white/60">No plans available</div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {plans.map((plan) => {
+                  const isPopular = plan.name.toLowerCase().includes('silver')
+                  return (
+                    <div
+                      key={plan.id}
+                      className={`relative bg-white/5 backdrop-blur-sm rounded-2xl border p-6 transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
+                        isPopular
+                          ? 'border-primary-500/50 shadow-lg shadow-primary-500/20'
+                          : 'border-white/10 hover:border-primary-500/30'
+                      }`}
+                    >
+                      {isPopular && (
+                        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider">
+                          Most Popular
+                        </div>
+                      )}
+                      <div className="text-center">
+                        <h3 className="text-xl font-bold text-white">{plan.name}</h3>
+                        <p className="text-3xl font-bold text-primary-400 mt-2">
+                          {plan.currency} {plan.price}
+                          <span className="text-sm font-normal text-white/60"> / month</span>
+                        </p>
+                        <p className="text-white/60 text-sm mt-1">{plan.description}</p>
+                      </div>
+                      <div className="mt-4 space-y-2 text-white/70 text-sm">
+                        <div className="flex justify-between">
+                          <span>Direct Commission</span>
+                          <span className="text-primary-400 font-semibold">{plan.directCommissionPercent}%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Network Commission</span>
+                          <span className="text-primary-400 font-semibold">{plan.networkCommissionPercent}%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Network Depth</span>
+                          <span className="text-primary-400 font-semibold">{plan.networkDepth} levels</span>
+                        </div>
+                        {plan.features && plan.features.length > 0 && (
+                          <div className="mt-3 pt-3 border-t border-white/10">
+                            {plan.features.map((feature, idx) => (
+                              <div key={idx} className="flex items-start gap-2 text-white/60 text-xs">
+                                <span className="text-primary-400">✓</span>
+                                <span>{feature}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => {
+                          if (!referralCode) {
+                            toast.error('Please enter a referral code first')
+                            return
+                          }
+                          navigate(`/signup?ref=${referralCode}`)
+                        }}
+                        className={`mt-4 w-full py-2 rounded-xl font-semibold transition-all ${
+                          isPopular
+                            ? 'bg-primary-500 hover:bg-primary-600 text-white'
+                            : 'bg-white/10 hover:bg-white/20 text-white'
+                        }`}
+                      >
+                        Get Started
+                      </button>
+                    </div>
+                  )
+                })}
               </div>
-              <div className="text-3xl font-bold text-primary-400">
-                {settingsLoading ? '...' : `${settings.directCommissionPercent}%`}
-              </div>
-              <div className="text-white/60 text-sm font-medium">Direct Commission</div>
-              <div className="text-white/30 text-xs mt-1">on every referral</div>
-            </div>
-
-            <div className="group bg-white/5 rounded-xl p-5 border border-white/5 hover:border-primary-500/30 transition-all duration-300 hover:bg-white/10 hover:scale-105">
-              <div className="flex items-center justify-center mb-2">
-                <span className="text-2xl">🌐</span>
-              </div>
-              <div className="text-3xl font-bold text-primary-400">
-                {settingsLoading ? '...' : `${settings.networkCommissionPercent}%`}
-              </div>
-              <div className="text-white/60 text-sm font-medium">Network Commission</div>
-              <div className="text-white/30 text-xs mt-1">on sub-referrals</div>
-            </div>
-
-            <div className="group bg-white/5 rounded-xl p-5 border border-white/5 hover:border-primary-500/30 transition-all duration-300 hover:bg-white/10 hover:scale-105">
-              <div className="flex items-center justify-center mb-2">
-                <span className="text-2xl">📊</span>
-              </div>
-              <div className="text-3xl font-bold text-primary-400">
-                {settingsLoading ? '...' : `${settings.networkDepth}`}
-              </div>
-              <div className="text-white/60 text-sm font-medium">Network Levels</div>
-              <div className="text-white/30 text-xs mt-1">deep referral chain</div>
-            </div>
+            )}
           </div>
 
-          {/* Trust Badge */}
+          {/* ─── Trust Badge ─── */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-white/30 text-xs">
             <span className="flex items-center gap-1.5">
               <svg className="w-3.5 h-3.5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
@@ -229,4 +271,4 @@ export default function HomePage() {
       <Footer />
     </div>
   )
-} 
+}
