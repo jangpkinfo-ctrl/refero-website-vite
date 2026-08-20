@@ -6,14 +6,16 @@ export default function Header() {
   const location = useLocation()
   
   const navLinks = [
+    { href: '/', label: 'Home' },
     { href: '/about', label: 'About' },
+    { href: '/download', label: 'Download' },   // ✅ ADDED
     { href: '/terms', label: 'Terms' },
     { href: '/privacy', label: 'Privacy' },
     { href: '/support', label: 'Support' },
   ]
 
   return (
-    <header className="container-custom py-6 flex justify-between items-center">
+    <header className="container-custom py-6 flex flex-wrap justify-between items-center gap-4">
       <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
         <img 
           src="/logo_with_name.png" 
@@ -23,7 +25,7 @@ export default function Header() {
         />
       </Link>
       
-      <nav className="flex items-center gap-6 text-white text-sm md:text-base">
+      <nav className="flex flex-wrap items-center gap-4 text-white text-sm md:text-base">
         {navLinks.map((link) => (
           <Link
             key={link.href}
