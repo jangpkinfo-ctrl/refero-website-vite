@@ -8,7 +8,7 @@ export default function Header() {
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About' },
-    { href: '/download', label: 'Download' },   // ✅ ADDED
+    { href: '/download', label: 'Download' },  // ✅ No query param
     { href: '/terms', label: 'Terms' },
     { href: '/privacy', label: 'Privacy' },
     { href: '/support', label: 'Support' },

@@ -103,8 +103,9 @@ export default function VerifyPage() {
 
       if (response.ok) {
         toast.success('Email verified!')
+        // ✅ Redirect with verified flag
         setTimeout(() => {
-          navigate('/download')
+          navigate('/download?verified=true')
         }, 1000)
       } else {
         toast.error(data.message || 'Invalid OTP. Please try again.')
