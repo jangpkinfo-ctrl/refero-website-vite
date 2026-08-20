@@ -33,7 +33,6 @@ export default function DownloadPage() {
             </>
           )}
 
-          {/* ─── Always show download options ─── */}
           <p className={`text-white/60 text-sm ${isVerified ? 'mb-6' : 'mb-8'}`}>
             {isVerified ? 'Choose your download option below:' : 'Download the Refero app and start earning!'}
           </p>
@@ -42,16 +41,13 @@ export default function DownloadPage() {
             {/* ─── Play Store Card ─── */}
             <div className="card-glass p-6 hover:scale-105 transition-all duration-300">
               <div className="flex flex-col items-center">
-                {/* Play Store SVG Icon */}
-                <svg className="w-16 h-16 mb-3" viewBox="0 0 24 24" fill="none">
-                  <path d="M4.5 3.75L15.5 12L4.5 20.25V3.75Z" fill="#4285F4" stroke="white" strokeWidth="0.5"/>
-                  <path d="M4.5 3.75L15.5 12L4.5 20.25V3.75Z" fill="#34A853" stroke="white" strokeWidth="0.5" opacity="0.3"/>
-                  <path d="M4.5 3.75L15.5 12L4.5 20.25V3.75Z" fill="#FBBC04" stroke="white" strokeWidth="0.5" opacity="0.3"/>
-                  <path d="M4.5 3.75L15.5 12L4.5 20.25V3.75Z" fill="#EA4335" stroke="white" strokeWidth="0.5" opacity="0.3"/>
-                  <path d="M4.5 3.75L15.5 12L4.5 20.25V3.75Z" fill="#4285F4" stroke="white" strokeWidth="0.5" opacity="0.3"/>
-                  <path d="M15.5 12L20.25 9.25L4.5 3.75L15.5 12Z" fill="#34A853" stroke="white" strokeWidth="0.5"/>
-                  <path d="M15.5 12L20.25 14.75L4.5 20.25L15.5 12Z" fill="#4285F4" stroke="white" strokeWidth="0.5"/>
-                </svg>
+                {/* ✅ Official-looking Play Store icon */}
+                <div className="w-16 h-16 mb-3 flex items-center justify-center bg-gradient-to-br from-blue-500 to-green-500 rounded-xl shadow-lg">
+                  <svg className="w-10 h-10 text-white" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 21.5v-19l18 9.5-18 9.5zM5 19l11.5-7L5 5v14zM6 8.5l4.5 2.5L6 13.5v-5z" />
+                    <polygon points="14,12 9.5,14.5 5,12 5,5 14,12" />
+                  </svg>
+                </div>
                 <h3 className="text-xl font-semibold text-white">Play Store</h3>
                 <p className="text-white/60 text-sm mt-1">Official app</p>
                 <a
@@ -68,14 +64,16 @@ export default function DownloadPage() {
             {/* ─── APK Card ─── */}
             <div className="card-glass p-6 hover:scale-105 transition-all duration-300">
               <div className="flex flex-col items-center">
-                {/* APK SVG Icon */}
-                <svg className="w-16 h-16 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="#6C63FF"/>
-                  <path d="M2 17l10 5 10-5" stroke="#6C63FF"/>
-                  <path d="M2 12l10 5 10-5" stroke="#6C63FF"/>
-                  <rect x="6" y="8" width="12" height="8" rx="1" stroke="#6C63FF" fill="none"/>
-                  <path d="M9 12l2 2 4-4" stroke="#6C63FF" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                {/* ✅ Clean APK icon */}
+                <div className="w-16 h-16 mb-3 flex items-center justify-center bg-white/10 rounded-xl border border-white/20">
+                  <svg className="w-10 h-10 text-primary-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" strokeLinejoin="round" />
+                    <path d="M2 17l10 5 10-5" strokeLinejoin="round" />
+                    <path d="M2 12l10 5 10-5" strokeLinejoin="round" />
+                    <rect x="6" y="8" width="12" height="8" rx="1" strokeLinejoin="round" />
+                    <path d="M9 12l2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
                 <h3 className="text-xl font-semibold text-white">APK Download</h3>
                 <p className="text-white/60 text-sm mt-1">Direct install</p>
                 <a
