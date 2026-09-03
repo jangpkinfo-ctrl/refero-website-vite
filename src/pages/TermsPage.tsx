@@ -8,33 +8,52 @@ export default function TermsPage() {
       <main className="flex-1 container-custom py-12 max-w-3xl">
         <h1 className="text-3xl font-bold text-white mb-6">Terms & Conditions</h1>
         <div className="space-y-4 text-white/70">
-          <p><strong>Last Updated:</strong> August 2026</p> 
-          
+          <p><strong>Last Updated:</strong> August 2026</p>
+
           <h2 className="text-xl font-semibold text-white mt-6">1. Acceptance of Terms</h2>
           <p>By using the Refero app or website, you agree to these terms.</p>
-          
+
           <h2 className="text-xl font-semibold text-white mt-6">2. Description of Service</h2>
           <p>Refero is a referral marketing platform that allows users to earn commissions by referring others to subscribe to paid plans.</p>
-          
+
           <h2 className="text-xl font-semibold text-white mt-6">3. User Accounts</h2>
           <p>You are responsible for maintaining the security of your account and for all activities that occur under your account.</p>
-          
+
           <h2 className="text-xl font-semibold text-white mt-6">4. Commissions</h2>
-          <p>Commissions are earned according to the tier structure described in the app. Payments are made via bank transfer.</p>
-          
+          <p>
+            Commissions are earned according to the tier structure described in the app.
+            <br />
+            <span className="text-amber-400">
+              ⚠️ Earnings depend on your referral efforts and are NOT guaranteed. Results vary based on individual performance.
+            </span>
+          </p>
+
           <h2 className="text-xl font-semibold text-white mt-6">5. Payment and Fees</h2>
-          <p>All payments are processed manually. Refero reserves the right to change pricing at any time.</p>
-          
+          <p>
+            All payments are processed via <strong>manual bank transfer</strong>.
+            <br />
+            <span className="text-amber-400">
+              📌 This app does NOT use Google Play Billing for subscriptions.
+            </span>
+            <br />
+            Refero reserves the right to change pricing at any time.
+          </p>
+
           <h2 className="text-xl font-semibold text-white mt-6">6. Termination</h2>
           <p>We may terminate your account if you violate these terms.</p>
-          
+
           <h2 className="text-xl font-semibold text-white mt-6">7. Limitation of Liability</h2>
           <p>Refero is not liable for any indirect or consequential damages.</p>
-          
+
           <h2 className="text-xl font-semibold text-white mt-6">8. Governing Law</h2>
           <p>These terms are governed by the laws of Pakistan.</p>
-          
-          <p className="mt-6">For any questions, contact <a href="mailto:support@referoglobal.com" className="text-primary-400 hover:underline">support@referoglobal.com</a></p>
+
+          <p className="mt-6">
+            For any questions, contact{' '}
+            <a href="mailto:support@referoglobal.com" className="text-primary-400 hover:underline">
+              support@referoglobal.com
+            </a>
+          </p>
         </div>
       </main>
       <Footer />
